@@ -1,0 +1,39 @@
+export const BACKEND ={
+    BASE_URL: 'http://195.200.15.181:5003',
+    headers:{
+        accept:'application/json',
+    }
+}
+
+export const fetchGetAllSeagrass = async () => {
+    const endpoint = '${BACKEND.BASE_URL}/seagrass/get-data';
+
+    const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: BACKEND.headers,
+    });
+
+if (!response.ok) {
+    throw new Error('Failed to fetch seagrass data');
+}
+
+const data= await response.json();
+
+return data;
+};
+
+export const uploadSeagrassImage = async (fileUri: string, fileName: string) => {
+    const formData = new FormData();
+    formData.append('file', {
+        uri: fileUri,
+        name: fileName,
+        type: 'image/jpeg',
+    } as any);
+}
+
+const json = await response.json();
+if (!response.ok) throw new Error(json.message || 'Failed to upload image');
+
+return json;
+
+};
