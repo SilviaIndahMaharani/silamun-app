@@ -69,11 +69,11 @@ print("Model loaded successfully.")
 # =====================================
 # 🔍 LOAD JSON DATA
 # =====================================
-with open("dataTanaman.json") as f:
-    tanaman_data = json.load(f)
+with open("dataLamun.json") as f:
+    lamun_data = json.load(f)
 
-def get_tanaman_by_label(label_name):
-    for data in tanaman_data:
+def get_lamun_by_label(label_name):
+    for data in lamun_data:
         if label_name.lower().replace(" ", "-") in data["nama"].lower().replace(" ", "-"):
             return data
     return None
@@ -87,7 +87,7 @@ def root():
 
 @app.get("/lamun/get-data")
 def get_data():
-    return JSONResponse(content=tanaman_data)
+    return JSONResponse(content=lamun_data)
 
 @app.post("/lamun/detect")
 async def detect_image(file: UploadFile = File(...), threshold: float = 0.6):
@@ -119,14 +119,14 @@ async def detect_image(file: UploadFile = File(...), threshold: float = 0.6):
             y1 *= scale_y
             y2 *= scale_y
 
-            # Mendapatkan data tanaman berdasarkan label yang terdeteksi
-            data_tanaman = get_tanaman_by_label(class_name)
+            # Mendapatkan data lamun berdasarkan label yang terdeteksi
+            data_lamun = get_lamun_by_label(class_name)
 
             results.append({
                 "label": class_name,
                 "score": round(float(score), 4),
                 "box": [x1, y1, x2, y2],
-                "data_tanaman": data_tanaman or "Data not found"
+                "data_lamun": data_lamun or "Data not found"
             })
 
     return JSONResponse(content={"message": "success", "detections": results})

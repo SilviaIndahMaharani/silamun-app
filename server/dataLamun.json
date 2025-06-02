@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "nama": "Cymodocea rotundata",
+    "dekripsi": "Cymodocea rotundata adalah spesies lamun yang memiliki daun berbentuk pita dengan ujung membulat. Tumbuhan ini membentuk hamparan padat di perairan dangkal tropis.",
+    "ekologi": "Tumbuh di dasar berpasir atau berlumpur di perairan dangkal, sering ditemukan di laguna dan teluk yang tenang. Berperan penting dalam ekosistem pesisir sebagai habitat bagi berbagai organisme laut.",
+    "manfaat": "Menyediakan habitat bagi ikan dan invertebrata, membantu menstabilkan sedimen, dan berkontribusi pada kualitas air.",
+    "catatan": "Sering kali ditemukan bersama dengan spesies lamun lainnya, seperti Thalassia hemprichii.",
+    "penyebaran": "Tersebar luas di wilayah Indo-Pasifik, termasuk Indonesia, Filipina, dan Australia.",
+    "imgSRC": "/gambar_lamun/cymodocea_rotundata.jpg",
+  },
+  {
+    "id": 2,
+    "nama": "Enhalus acoroides",
+    "dekripsi": "Enhalus acoroides adalah lamun terbesar dengan daun panjang dan lebar yang dapat mencapai panjang hingga 1,5 meter. Tumbuhan ini memiliki bunga yang mencolok dan buah yang besar.",
+    "ekologi": "Tumbuh di perairan dangkal dengan dasar berlumpur atau berpasir, sering ditemukan di muara sungai dan laguna. Membentuk hamparan padat yang penting bagi ekosistem pesisir.",
+    "manfaat": "Menyediakan habitat bagi berbagai spesies laut, membantu menstabilkan sedimen, dan berperan dalam siklus nutrien.",
+    "catatan": "Bunga betina Enhalus acoroides adalah yang terbesar di antara spesies lamun.",
+    "penyebaran": "Ditemukan di wilayah Indo-Pasifik, termasuk Indonesia, Malaysia, dan Filipina.",
+    "imgSRC": "/gambar_lamun/enhalus_acoroides.jpg",
+  },
+  {
+    "id": 3,
+    "nama": "Syringodium isoetifolium",
+    "dekripsi": "Syringodium isoetifolium memiliki daun berbentuk silinder seperti tabung, berbeda dari bentuk daun lamun lainnya. Tumbuhan ini membentuk hamparan padat di perairan dangkal.",
+    "ekologi": "Tumbuh di dasar berpasir atau berlumpur di perairan dangkal, sering ditemukan di laguna dan teluk yang tenang. Berperan penting dalam ekosistem pesisir sebagai habitat bagi berbagai organisme laut.",
+    "manfaat": "Menyediakan habitat bagi ikan dan invertebrata, membantu menstabilkan sedimen, dan berkontribusi pada kualitas air.",
+    "catatan": "Bentuk daunnya yang unik membedakannya dari spesies lamun lainnya.",
+    "penyebaran": "Tersebar luas di wilayah Indo-Pasifik, termasuk Indonesia, Filipina, dan Australia.",
+    "imgSRC": "/gambar_lamun/syringodium_isoetifolium.jpg",
+  },
+  {
+    "id": 4,
+    "nama": "Thalassia hemprichii",
+    "dekripsi": "Thalassia hemprichii memiliki daun berbentuk pita dengan ujung membulat dan sistem akar yang kuat. Tumbuhan ini membentuk hamparan padat di perairan dangkal tropis.",
+    "ekologi": "Tumbuh di dasar berpasir atau berlumpur di perairan dangkal, sering ditemukan di laguna dan teluk yang tenang. Berperan penting dalam ekosistem pesisir sebagai habitat bagi berbagai organisme laut.",
+    "manfaat": "Menyediakan habitat bagi ikan dan invertebrata, membantu menstabilkan sedimen, dan berkontribusi pada kualitas air.",
+    "catatan": "Sering kali ditemukan bersama dengan spesies lamun lainnya, seperti Cymodocea rotundata.",
+    "penyebaran": "Tersebar luas di wilayah Indo-Pasifik, termasuk Indonesia, Filipina, dan Australia.",
+    "imgSRC": "/gambar_lamun/thalassia_hemprichii.jpg",
+  }
+]
