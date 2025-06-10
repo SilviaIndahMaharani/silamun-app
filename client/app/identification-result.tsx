@@ -104,29 +104,29 @@ export default function IdentificationResult() {
             {parsedDetections.map((det, i) => (
               <View key={i} style={{ marginBottom: 16 }}>
                 <Text style={styles.label}>
-                  Jenis Lamun: <Text style={styles.value}>{det.label}</Text>
+                  Jenis Lamun: <Text style={styles.value}>{det.data_lamun?.nama ?? 'Tidak ditemukan'}</Text>
                 </Text>
                 <Text style={styles.label}>
                   Keyakinan: <Text style={styles.value}>{(det.score * 100).toFixed(2)}%</Text>
                 </Text>
                 <Text style={styles.label}>
-                 dekripsiii: <Text style={styles.value}>{det.dekripsi}</Text>
-                </Text>
-                {/* <Text style={styles.label}>
-                  Catatan: <Text style={styles.value}>{det.catatan ?? 'Tidak ditemukan'}</Text>
+                  Genus: <Text style={styles.value}>{det.data_lamun?.Genus ?? 'Tidak ditemukan'}</Text>
                 </Text>
                 <Text style={styles.label}>
-                  Deskripsi: <Text style={styles.value}>{det.deskripsi ?? 'Tidak ditemukan'}</Text>
+                  Spesies: <Text style={styles.value}>{det.data_lamun?.Species ?? 'Tidak ditemukan'}</Text>
                 </Text>
                 <Text style={styles.label}>
-                  Ekologi: <Text style={styles.value}>{det.ekologi ?? 'Tidak ditemukan'}</Text>
+                  Daun: <Text style={styles.value}>{det.data_lamun?.Daun ?? 'Tidak ditemukan'}</Text>
                 </Text>
                 <Text style={styles.label}>
-                  Manfaat: <Text style={styles.value}>{det.manfaat ?? 'Tidak ditemukan'}</Text>
+                  Rhizoma: <Text style={styles.value}>{det.data_lamun?.Rhizoma ?? 'Tidak ditemukan'}</Text>
                 </Text>
                 <Text style={styles.label}>
-                  Penyebaran: <Text style={styles.value}>{det.penyebaran ?? 'Tidak ditemukan'}</Text>
-                </Text> */}
+                  Akar: <Text style={styles.value}>{det.data_lamun?.Akar ?? 'Tidak ditemukan'}</Text>
+                </Text> 
+                <Text style={styles.label}>
+                  Keterangan: <Text style={styles.value}>{det.data_lamun?.Keterangan ?? 'Tidak ditemukan'}</Text>
+                </Text> 
               </View>
             ))}
           </View>

@@ -24,7 +24,7 @@ export default function SeagrassDetails() {
   } = useFetchSeagrassDetails(id as string);
 
   const imageUrl = seagrassDetails?.imgSRC
-    ? `http://195.200.15.181:5003/${seagrassDetails.imgSRC}`
+    ? `http://195.200.15.181:5006/${seagrassDetails.imgSRC}`
     : null;
 
   return (
@@ -38,7 +38,7 @@ export default function SeagrassDetails() {
 
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.card}>
-          <Text style={styles.title}>{seagrassDetails?.nama}</Text>
+          <Text style={styles.title}>{seagrassDetails?.Species}</Text>
           {imageUrl && (
             <Image
               source={{ uri: imageUrl }}
@@ -55,14 +55,18 @@ export default function SeagrassDetails() {
             <Text style={styles.errorText}>Terjadi kesalahan: {error.message}</Text>
           ) : (
             <>
-              <Text style={styles.label}>Deskripsi:</Text>
-              <Text style={styles.text}>{seagrassDetails?.dekripsi ?? '-'}</Text>
-              <Text style={styles.label}>Ekologi:</Text>
-              <Text style={styles.text}>{seagrassDetails?.ekologi ?? '-'}</Text>
-              <Text style={styles.label}>Manfaat:</Text>
-              <Text style={styles.text}>{seagrassDetails?.manfaat ?? '-'}</Text>
-              <Text style={styles.label}>Penyebaran:</Text>
-              <Text style={styles.text}>{seagrassDetails?.penyebaran ?? '-'}</Text>
+              <Text style={styles.label}>Keterangan:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Keterangan ?? '-'}</Text>
+              <Text style={styles.label}>Genus:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Genus ?? '-'}</Text>
+              <Text style={styles.label}>Spesies:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Species ?? '-'}</Text>
+              <Text style={styles.label}>Daun:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Daun ?? '-'}</Text>
+              <Text style={styles.label}>Rhizoma:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Rhizoma ?? '-'}</Text>
+              <Text style={styles.label}>Akar:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Akar ?? '-'}</Text>
             </>
           )}
         </View>

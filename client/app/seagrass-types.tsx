@@ -1,7 +1,7 @@
 import { fetchGetAllSeagrass } from "@/service/api";
 import useFetch from "@/service/useFetch";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, useRouter, useNavigation } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React from "react";
 import {
   ActivityIndicator,
@@ -25,7 +25,6 @@ export default function SeagrassTypes() {
   });
 
   const router = useRouter();
-  const navigation = useNavigation();
   const { data: seagrassTypes, loading, error } = useFetch(fetchGetAllSeagrass);
 
   if (!fontsLoaded) return null;
@@ -59,7 +58,7 @@ export default function SeagrassTypes() {
           contentContainerStyle={styles.grid}
           columnWrapperStyle={{ justifyContent: "space-between" }}
           renderItem={({ item }) => {
-            const imageUrl = `http://195.200.15.181:5003${item.imgSRC}`;
+            const imageUrl = `http://195.200.15.181:5006${item.imgSRC}`;
 
             return (
               <View style={styles.card}>
@@ -69,9 +68,9 @@ export default function SeagrassTypes() {
                   resizeMode="cover"
                 />
                 <View style={styles.cardContent}>
-                  <Text style={styles.cardTitle}>{item.nama}</Text>
+                  <Text style={styles.cardTitle}>{item.Species}</Text>
                   <Text style={styles.cardDescription} numberOfLines={3}>
-                    {item.dekripsi}
+                    {item.Keterangan}
                   </Text>
                   <Link
                     href={{

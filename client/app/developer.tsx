@@ -35,7 +35,11 @@ export default function DeveloperScreen() {
         />
 
         <View style={styles.card}>
-          <View style={styles.circle} />
+          <Image
+            source={require("../assets/images/developer.jpg")}
+            style={styles.circle}
+            resizeMode="cover"
+          />
           <Text style={styles.developedBy}>Dikembangkan oleh</Text>
           <Text style={styles.name}>Silvia Indah Maharani</Text>
 

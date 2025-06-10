@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
 import { Link } from "expo-router";
-import { MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 
 const { width } = Dimensions.get("window");
@@ -53,7 +53,7 @@ export default function HomeScreen() {
         <Link href="/seagrass-types" asChild>
           <TouchableOpacity style={styles.menuItem}>
             <View style={styles.menuIcon}>
-              <MaterialCommunityIcons name="sea" size={32} color="#0099A8" />
+              <MaterialIcons name="grass" size={32} color="#0099A8" />
             </View>
             <Text style={styles.menuText}>Spesies Lamun</Text>
           </TouchableOpacity>

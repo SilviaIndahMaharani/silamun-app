@@ -1,5 +1,5 @@
 export const BACKEND = {
-    BASE_URL: 'http://195.200.15.181:5003',
+    BASE_URL: 'http://195.200.15.181:5006',
     headers: {
         accept: 'application/json',
     }

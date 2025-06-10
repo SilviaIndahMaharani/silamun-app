@@ -1,5 +1,5 @@
 import { useUploadImage } from '@/service/useUploadImage';
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { useState } from "react";
@@ -63,7 +63,6 @@ export default function UploadImage() {
       style={styles.backgroundImage}
       imageStyle={{ opacity: 0.7 }}
     >
-      {/* Modal Aturan */}
       <Modal visible={showRules} animationType="slide" transparent>
         <View style={styles.modalWrapper}>
           <View style={styles.modalContent}>
@@ -125,7 +124,7 @@ export default function UploadImage() {
       ) : (
         <View style={styles.containerOperCamera}>
           <TouchableOpacity onPress={pickImageFromGallery} style={styles.openCamera}>
-            <Ionicons name="camera" size={22} color="rgb(0, 94, 103)" />
+            <AntDesign name="picture" size={22} color="rgb(0, 94, 103)" />
             <Text style={styles.textOpenCamera}> Pilih dari Galeri</Text>
           </TouchableOpacity>
         </View>
