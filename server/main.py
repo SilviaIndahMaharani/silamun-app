@@ -73,9 +73,18 @@ with open("dataLamun.json") as f:
     lamun_data = json.load(f)
 
 def get_lamun_by_label(label_name):
+    # Normalize label_name to match the format in the dataLamun.json
+    label_name_normalized = label_name.lower().replace(" ", "-")
+    print(f"Looking for data for label: {label_name_normalized}")
+
     for data in lamun_data:
-        if label_name.lower().replace(" ", "-") in data["nama"].lower().replace(" ", "-"):
+        # Normalize each label in the JSON data to match
+        data_name_normalized = data["nama"].lower().replace(" ", "-")
+        print(f"Comparing with: {data_name_normalized}")
+
+        if label_name_normalized == data_name_normalized:
             return data
+
     return None
 
 # =====================================
@@ -90,12 +99,12 @@ def get_data():
     return JSONResponse(content=lamun_data)
 
 @app.post("/lamun/detect")
-async def detect_image(file: UploadFile = File(...), threshold: float = 0.6):
+async def detect_image(file: UploadFile = File(...), threshold: float = 0.3):
     # Membaca file gambar yang diupload
     image_bytes = await file.read()
     image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
-    # Resize gambar ke 320x320 sesuai dengan kebutuhan model SSD Lite
+    # Resize gambar ke 640x640 sesuai dengan kebutuhan model SSD Lite
     image_resized = image.resize((640, 640))
 
     # Mengkonversi gambar menjadi tensor
@@ -122,6 +131,11 @@ async def detect_image(file: UploadFile = File(...), threshold: float = 0.6):
             # Mendapatkan data lamun berdasarkan label yang terdeteksi
             data_lamun = get_lamun_by_label(class_name)
 
+            if data_lamun:
+                print(f"Data found for {class_name}: {data_lamun}")
+            else:
+                print(f"No data found for {class_name}")
+
             results.append({
                 "label": class_name,
                 "score": round(float(score), 4),
@@ -131,6 +145,6 @@ async def detect_image(file: UploadFile = File(...), threshold: float = 0.6):
 
     return JSONResponse(content={"message": "success", "detections": results})
 
-if __name__ == "__main__":
+if name == "main":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=5001, reload=False)
+    uvicorn.run("main:app", host="0.0.0.0", port=5006, reload=False)

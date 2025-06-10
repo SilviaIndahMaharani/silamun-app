@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose port backend here, e.g. 5001
-EXPOSE 5003
+EXPOSE 5006
 
 # Run the FASTAPI app with uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5003"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5006"]

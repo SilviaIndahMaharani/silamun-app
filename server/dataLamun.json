@@ -17,7 +17,7 @@
     "manfaat": "Menyediakan habitat bagi berbagai spesies laut, membantu menstabilkan sedimen, dan berperan dalam siklus nutrien.",
     "catatan": "Bunga betina Enhalus acoroides adalah yang terbesar di antara spesies lamun.",
     "penyebaran": "Ditemukan di wilayah Indo-Pasifik, termasuk Indonesia, Malaysia, dan Filipina.",
-    "imgSRC": "/gambar_lamun/enhalus_acoroides.jpg",
+    "imgSRC": "/gambar_lamun/enhalus_acoroides.jpg"
   },
   {
     "id": 3,
@@ -27,7 +27,7 @@
     "manfaat": "Menyediakan habitat bagi ikan dan invertebrata, membantu menstabilkan sedimen, dan berkontribusi pada kualitas air.",
     "catatan": "Bentuk daunnya yang unik membedakannya dari spesies lamun lainnya.",
     "penyebaran": "Tersebar luas di wilayah Indo-Pasifik, termasuk Indonesia, Filipina, dan Australia.",
-    "imgSRC": "/gambar_lamun/syringodium_isoetifolium.jpg",
+    "imgSRC": "/gambar_lamun/syringodium_isoetifolium.jpg"
   },
   {
     "id": 4,
@@ -37,6 +37,6 @@
     "manfaat": "Menyediakan habitat bagi ikan dan invertebrata, membantu menstabilkan sedimen, dan berkontribusi pada kualitas air.",
     "catatan": "Sering kali ditemukan bersama dengan spesies lamun lainnya, seperti Cymodocea rotundata.",
     "penyebaran": "Tersebar luas di wilayah Indo-Pasifik, termasuk Indonesia, Filipina, dan Australia.",
-    "imgSRC": "/gambar_lamun/thalassia_hemprichii.jpg",
+    "imgSRC": "/gambar_lamun/thalassia_hemprichii.jpg"
   }
 ]
