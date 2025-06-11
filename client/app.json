@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "silamun-app",
+    "name": "SiLamun",
     "slug": "silamun-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,23 +8,40 @@
     "scheme": "silamunapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": {
+        "light": "./assets/images/logo.png",
+        "dark": "./assets/images/logo.png",
+        "tinted": "./assets/images/logo.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
       "permissions": [
-        "CAMERA"
-      ]
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.silviaindah.silamunapp"
     },
+
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/logo.png"
     },
+
+    "splash": {
+      "image": "./assets/images/splash-screen.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+
     "plugins": [
       [
         "expo-splash-screen",
@@ -34,10 +51,30 @@
           "backgroundColor": "#ffffff"
         }
       ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow this app to access your camera."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
       "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+
+    "extra": {
+      "eas": {
+        "projectId": "d9934edc-0f7e-48c2-854b-30c5c9c5b559"
+      }
     }
   }
 }

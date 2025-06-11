@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginTop: 50,
+    fontFamily: "Poppins-Regular"
   },
   grid: {
     paddingHorizontal: 12,

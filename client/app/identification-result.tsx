@@ -98,7 +98,7 @@ export default function IdentificationResult() {
         {!imageUri || !imageSize.width ? (
           <Text style={styles.noDetectionText}>Gambar tidak tersedia</Text>
         ) : parsedDetections.length === 0 ? (
-          <Text style={styles.noDetectionText}>Tidak ada deteksi ditemukan.</Text>
+          <Text style={styles.noDetectionText}>Objek tidak dapat teridentifikasi!</Text>
         ) : (
           <View style={styles.card}>
             {parsedDetections.map((det, i) => (
@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     fontSize: 16,
     fontWeight: '500',
+    fontFamily: "Poppins-Regular"
   },
   card: {
     backgroundColor: '#ffffffcc',
@@ -213,6 +214,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   label: {
+    fontFamily: "Poppins-Regular",
     fontSize: 16,
     fontWeight: '600',
     color: '#005C62',

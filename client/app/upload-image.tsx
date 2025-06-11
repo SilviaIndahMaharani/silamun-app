@@ -72,7 +72,7 @@ export default function UploadImage() {
                 1. Pastikan gambar fokus dan objek jelas terlihat. {"\n"}
                 2. Hindari gangguan latar belakang atau refleksi. {"\n"}
                 3. Hindari pencahayaan gelap atau objek lain yang mengganggu. {"\n"}
-                4. Saat ini SiLamun hanya dapat mengidentifikasi lamun jenis Cymodocea rotundata, Syringodium isoetifolium, dan Thalassia hemprichii.
+                4. Saat ini SiLamun hanya dapat mengidentifikasi lamun jenis Cymodocea rotundata, Enhalus acoroides, Syringodium isoetifolium, dan Thalassia hemprichii.
               </Text>
               <TouchableOpacity style={styles.modalButton} onPress={() => setShowRules(false)}>
                 <Text style={styles.modalButtonText}>Mengerti</Text>
@@ -243,6 +243,7 @@ const styles = StyleSheet.create({
   },
   openCamera: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
     padding: 16,
@@ -255,5 +256,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     fontFamily: "Poppins-Bold",
+    textAlignVertical: "center",
   },
 });

@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useFonts } from "expo-font";
 
 export default function SeagrassDetails() {
   const { id } = useLocalSearchParams();
@@ -23,9 +24,20 @@ export default function SeagrassDetails() {
     error,
   } = useFetchSeagrassDetails(id as string);
 
-  const imageUrl = seagrassDetails?.imgSRC
-    ? `http://195.200.15.181:5006/${seagrassDetails.imgSRC}`
-    : null;
+  const [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
+  });
+  if (!fontsLoaded) return null;
+
+  const getImageUrl = (src: string | undefined) => {
+    if (!src) return null;
+    return src.startsWith('/')
+      ? `http://195.200.15.181:5006${src}`
+      : `http://195.200.15.181:5006/${src}`;
+  };
+
+  const imageUrl = getImageUrl(seagrassDetails?.imgSRC);
 
   return (
     <ImageBackground
@@ -89,7 +101,7 @@ const styles = StyleSheet.create({
     paddingTop: 80,
     alignItems: 'center',
   },
- backButton: {
+  backButton: {
     position: "absolute",
     top: 20,
     left: 20,
@@ -111,6 +123,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#003c43',
     marginBottom: 10,
+    fontFamily: 'Poppins-Bold',
   },
   image: {
     width: '100%',
@@ -127,13 +140,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#003c43',
     marginTop: 8,
+    fontFamily: 'Poppins-Bold',
   },
   text: {
     color: '#003c43',
     textAlign: 'justify',
+    fontFamily: 'Poppins-Regular',
   },
   errorText: {
     color: '#900',
     fontStyle: 'italic',
+    fontFamily: 'Poppins-Regular',
   },
 });
