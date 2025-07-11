@@ -33,6 +33,13 @@ export default function DeveloperScreen() {
           style={styles.logo}
           resizeMode="contain"
         />
+            <View style={styles.logoTopRight}>
+          <Image
+            source={require("../assets/images/logo_umrah.png")}  // Ganti sesuai lokasi file
+            style={styles.logoTopRightImage}
+            resizeMode="contain"
+          />
+        </View>
 
         <View style={styles.card}>
           <Image
@@ -60,6 +67,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+      logoTopRight: {
+  position: "absolute",
+  top: 40,
+  right: 20,
+  zIndex: 10,
+},
+
+logoTopRightImage: {
+  width: 40,
+  height: 40,
+},
   backButton: {
     position: "absolute",
     top: 40,

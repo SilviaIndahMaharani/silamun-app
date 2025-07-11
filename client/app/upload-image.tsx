@@ -18,7 +18,8 @@ import {
 
 export default function UploadImage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const { loading, error, uploadImage } = useUploadImage();
+  const [preprocessedImage, setPreprocessedImage] = useState<string | null>(null);
+  const { loading, error, uploadImage, preprocess } = useUploadImage();
   const router = useRouter();
   const navigation = useNavigation();
   const [showRules, setShowRules] = useState(true);
@@ -36,7 +37,15 @@ export default function UploadImage() {
     });
 
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      const imageUri = result.assets[0].uri;
+      setSelectedImage(imageUri);
+
+      try {
+        const { result } = await preprocess(imageUri);
+        setPreprocessedImage(`data:image/jpeg;base64,${result.preprocessed_base64}`);
+      } catch (err: any) {
+        Alert.alert("Gagal Preprocess", err.message);
+      }
     }
   };
 
@@ -49,7 +58,7 @@ export default function UploadImage() {
         pathname: "/identification-result",
         params: {
           detections: JSON.stringify(result.detections),
-          imageUri: fileUri,
+          imageUri: preprocessedImage,
         },
       });
     } catch (err: any) {
@@ -58,29 +67,48 @@ export default function UploadImage() {
   };
 
   return (
+    
     <ImageBackground
       source={require("../assets/images/background.png")}
       style={styles.backgroundImage}
       imageStyle={{ opacity: 0.7 }}
     >
-      <Modal visible={showRules} animationType="slide" transparent>
-        <View style={styles.modalWrapper}>
-          <View style={styles.modalContent}>
-            <ScrollView>
-              <Text style={styles.modalTitle}>Aturan Pemilihan Gambar</Text>
-              <Text style={styles.modalText}>
-                1. Pastikan gambar fokus dan objek jelas terlihat. {"\n"}
-                2. Hindari gangguan latar belakang atau refleksi. {"\n"}
-                3. Hindari pencahayaan gelap atau objek lain yang mengganggu. {"\n"}
-                4. Saat ini SiLamun hanya dapat mengidentifikasi lamun jenis Cymodocea rotundata, Enhalus acoroides, Syringodium isoetifolium, dan Thalassia hemprichii.
-              </Text>
-              <TouchableOpacity style={styles.modalButton} onPress={() => setShowRules(false)}>
-                <Text style={styles.modalButtonText}>Mengerti</Text>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
+      <Image
+  source={require("../assets/images/logo_umrah.png")} 
+  style={styles.topRightLogo}
+/>
+
+  <Modal visible={showRules} animationType="slide" transparent>
+  <View style={styles.modalWrapper}>
+    <View style={styles.modalContent}>
+      <ScrollView>
+        <View style={styles.modalHeader}>
+          <Ionicons name="information-circle-outline" size={26} color="rgb(0, 94, 103)" />
+          <Text style={styles.modalTitle}>Aturan Pengambilan Foto</Text>
         </View>
-      </Modal>
+
+        <View style={styles.divider} />
+
+        {[
+          "Pastikan gambar fokus dan objek jelas terlihat.",
+          "Gunakan pencahayaan yang cukup dan hindari bayangan.",
+          "Hindari gangguan latar belakang atau refleksi.",
+          "Saat ini SiLamun hanya dapat mengidentifikasi lamun jenis Cymodocea rotundata, Enhalus acoroides, Syringodium isoetifolium, dan Thalassia hemprichii.",
+        ].map((rule, index) => (
+          <View key={index} style={styles.bulletItem}>
+            <Ionicons name="leaf-outline" size={18} color="rgb(0, 94, 103)" style={{ marginRight: 8 }} />
+            <Text style={styles.bulletText}>{rule}</Text>
+          </View>
+        ))}
+
+        <TouchableOpacity style={styles.modalButton} onPress={() => setShowRules(false)}>
+          <Text style={styles.modalButtonText}>Mengerti</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  </View>
+</Modal>
+
 
       <TouchableOpacity style={styles.backButton} onPress={() => router.replace("/")}>
         <Ionicons name="arrow-back" size={28} color="rgb(0, 94, 103)" />
@@ -89,10 +117,24 @@ export default function UploadImage() {
       {selectedImage ? (
         <View style={styles.previewContainer}>
           <View style={styles.previewTitleWrapper}>
-            <Text style={styles.previewTitle}>Preview Foto</Text>
+            <Text style={styles.previewTitle}>Pratinjau</Text>
           </View>
-          <Image source={{ uri: selectedImage }} style={styles.previewImage} />
-
+          <View style={styles.comparisonWrapper}>
+            <View style={styles.comparisonItem}>
+              <Text style={styles.comparisonLabel}>Sebelum</Text>
+              <Image source={{ uri: selectedImage }} style={styles.previewImage} />
+            </View>
+            <View style={styles.comparisonItem}>
+              <Text style={styles.comparisonLabel}>Sesudah</Text>
+              {preprocessedImage ? (
+                <Image source={{ uri: preprocessedImage }} style={styles.previewImage} />
+              ) : (
+                <View style={[styles.previewImage, styles.emptyPreprocess]}>
+                  <Text style={{ color: "#888" }}>Belum diproses</Text>
+                </View>
+              )}
+            </View>
+          </View>
           <View style={styles.buttonWrapper}>
             <TouchableOpacity
               onPress={handleUpload}
@@ -105,9 +147,11 @@ export default function UploadImage() {
                 <Text style={styles.actionButtonText}>Prediksi</Text>
               )}
             </TouchableOpacity>
-
             <TouchableOpacity
-              onPress={() => setSelectedImage(null)}
+              onPress={() => {
+                setSelectedImage(null);
+                setPreprocessedImage(null);
+              }}
               style={[
                 styles.actionButton,
                 {
@@ -124,9 +168,27 @@ export default function UploadImage() {
       ) : (
         <View style={styles.containerOperCamera}>
           <TouchableOpacity onPress={pickImageFromGallery} style={styles.openCamera}>
-            <AntDesign name="picture" size={22} color="rgb(0, 94, 103)" />
+            <AntDesign name="picture" size={40} color="rgb(0, 94, 103)" />
             <Text style={styles.textOpenCamera}> Pilih dari Galeri</Text>
           </TouchableOpacity>
+          <View style={styles.rulesBox}>
+      <View style={styles.modalHeader}>
+        <Ionicons name="information-circle-outline" size={22} color="rgb(0, 94, 103)" />
+        <Text style={styles.rulesTitle}>Aturan Pengambilan Foto</Text>
+      </View>
+      <View style={styles.divider} />
+      {[
+        "Pastikan gambar fokus dan objek jelas terlihat.",
+        "Gunakan pencahayaan yang cukup dan hindari bayangan.",
+        "Hindari gangguan latar belakang atau refleksi.",
+        "Saat ini SiLamun hanya dapat mengidentifikasi lamun jenis Cymodocea rotundata, Enhalus acoroides, Syringodium isoetifolium, dan Thalassia hemprichii.",
+      ].map((rule, index) => (
+        <View key={index} style={styles.bulletItem}>
+          <Ionicons name="leaf-outline" size={16} color="rgb(0, 94, 103)" style={{ marginRight: 6 }} />
+          <Text style={styles.bulletText}>{rule}</Text>
+        </View>
+      ))}
+    </View>
         </View>
       )}
     </ImageBackground>
@@ -142,6 +204,58 @@ const styles = StyleSheet.create({
     height: "100%",
     opacity: 0.8,
   },
+  topRightLogo: {
+  position: "absolute",
+  top: 40,
+  right: 20,
+  width: 40,
+  height: 40,
+  zIndex: 20,
+},
+rulesBox: {
+  marginTop: 20,
+  backgroundColor: '#E0FFFA',
+  borderRadius: 16,
+  padding: 16,
+  width: '85%',
+  elevation: 2,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 3,
+},
+rulesTitle: {
+  fontSize: 16,
+  color: 'rgb(0, 94, 103)',
+  fontFamily: 'Poppins-Bold',
+  marginLeft: 8,
+},
+
+modalHeader: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: 8,
+},
+divider: {
+  height: 1,
+  backgroundColor: '#006D77',
+  marginVertical: 10,
+  opacity: 0.3,
+},
+bulletItem: {
+  flexDirection: 'row',
+  alignItems: 'flex-start',
+  marginBottom: 10,
+},
+bulletText: {
+  flex: 1,
+  fontSize: 15,
+  fontFamily: 'Poppins-Regular',
+  color: '#003C3C',
+  lineHeight: 22,
+},
+
   backButton: {
     position: "absolute",
     top: 40,
@@ -213,12 +327,42 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     fontFamily: "Poppins-Bold",
   },
-  previewImage: {
+  comparisonWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: 16,
+    marginBottom: 24,
+    marginTop: 60,
     width: "100%",
-    height: "70%",
+  },
+  comparisonItem: {
+    flex: 1,
+    alignItems: "center",
+  },
+  comparisonLabel: {
+    fontSize: 15,
+    fontFamily: "Poppins-Bold",
+    color: "#0ea5e9",
+    marginBottom: 8,
+    backgroundColor: "#fff",
+    paddingHorizontal: 12,
+    paddingVertical: 2,
+    borderRadius: 8,
+    elevation: 1,
+  },
+  previewImage: {
+    height: 220,
+    width: "100%",
     borderRadius: 16,
-    marginBottom: 20,
     resizeMode: "cover",
+    borderWidth: 2,
+    borderColor: "#0ea5e9",
+    backgroundColor: "#f0f0f0",
+  },
+  emptyPreprocess: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonWrapper: {
     width: "100%",
@@ -241,21 +385,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  openCamera: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "white",
-    padding: 16,
-    borderRadius: 10,
-    width: "60%",
-    elevation: 5,
-  },
-  textOpenCamera: {
-    color: "rgb(0, 94, 103)",
-    fontSize: 18,
-    fontWeight: "600",
-    fontFamily: "Poppins-Bold",
-    textAlignVertical: "center",
-  },
+openCamera: {
+  backgroundColor: "#fff",
+  width: 150,
+  height: 150,
+  borderRadius: 12,
+  justifyContent: "center",
+  alignItems: "center",
+  elevation: 1,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+},
+
+textOpenCamera: {
+  color: "#004B4E",
+  fontSize: 16,
+  fontWeight: "600",
+  fontFamily: "Poppins-Bold",
+  marginTop: 8,
+  textAlign: "center",
+},
+
 });

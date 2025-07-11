@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -10,7 +10,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from "react-native";
 
 export default function IdentificationResult() {
   const navigation = useNavigation();
@@ -24,6 +24,7 @@ export default function IdentificationResult() {
     height: 0,
   });
 
+  // Parse detection results, fallback to [] if parsing fails
   const parsedDetections: any[] = detections
     ? (() => {
         try {
@@ -44,103 +45,143 @@ export default function IdentificationResult() {
     }
   }, [imageUri]);
 
-  const screenWidth = Dimensions.get('window').width;
-  const scaleFactor = imageSize.width ? screenWidth / imageSize.width : 1;
-  const scaledHeight = imageSize.height * scaleFactor;
+  const screenWidth = Dimensions.get("window").width;
+  const scaleFactor = imageSize.width
+    ? (screenWidth - 32) / imageSize.width
+    : 1;
 
   return (
     <ImageBackground
-      source={require('../assets/images/background.png')}
+      source={require("../assets/images/background.png")}
       style={styles.backgroundImage}
     >
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Image
+        source={require("../assets/images/logo_umrah.png")} // ganti sesuai path file-mu
+        style={styles.topRightLogo}
+      />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
         <Ionicons name="arrow-back" size={28} color="rgb(0, 94, 103)" />
       </TouchableOpacity>
 
-       <View style={styles.TitleWrapper}>
-            <Text style={styles.Title}>Hasil Identifikasi</Text>
-        </View>
-
-      {imageUri && imageSize.width > 0 && (
-        <View style={[styles.imageContainer, { height: scaledHeight }]}>
-          <Image
-            source={{ uri: imageUri }}
-            style={{ width: '100%', height: scaledHeight, borderRadius: 16 }}
-            resizeMode="cover"
-          />
-          {parsedDetections.map((det, i) => {
-            const [x1, y1, x2, y2] = det.box;
-            return (
-              <View
-                key={i}
-                style={{
-                  position: 'absolute',
-                  left: x1 * scaleFactor,
-                  top: y1 * scaleFactor,
-                  width: (x2 - x1) * scaleFactor,
-                  height: (y2 - y1) * scaleFactor,
-                  borderWidth: 2,
-                  borderColor: 'red',
-                  borderRadius: 4,
-                  backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                }}
-              >
-                <Text style={styles.boxLabel}>
-                  {det.label} ({(det.score * 100).toFixed(1)}%)
-                </Text>
-              </View>
-            );
-          })}
-        </View>
-      )}
-
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.Title}>Hasil Identifikasi</Text>
+
         {!imageUri || !imageSize.width ? (
           <Text style={styles.noDetectionText}>Gambar tidak tersedia</Text>
-        ) : parsedDetections.length === 0 ? (
-          <Text style={styles.noDetectionText}>Objek tidak dapat teridentifikasi!</Text>
         ) : (
-          <View style={styles.card}>
-            {parsedDetections.map((det, i) => (
-              <View key={i} style={{ marginBottom: 16 }}>
-                <Text style={styles.label}>
-                  Jenis Lamun: <Text style={styles.value}>{det.data_lamun?.nama ?? 'Tidak ditemukan'}</Text>
-                </Text>
-                <Text style={styles.label}>
-                  Keyakinan: <Text style={styles.value}>{(det.score * 100).toFixed(2)}%</Text>
-                </Text>
-                <Text style={styles.label}>
-                  Genus: <Text style={styles.value}>{det.data_lamun?.Genus ?? 'Tidak ditemukan'}</Text>
-                </Text>
-                <Text style={styles.label}>
-                  Spesies: <Text style={styles.value}>{det.data_lamun?.Species ?? 'Tidak ditemukan'}</Text>
-                </Text>
-                <Text style={styles.label}>
-                  Daun: <Text style={styles.value}>{det.data_lamun?.Daun ?? 'Tidak ditemukan'}</Text>
-                </Text>
-                <Text style={styles.label}>
-                  Rhizoma: <Text style={styles.value}>{det.data_lamun?.Rhizoma ?? 'Tidak ditemukan'}</Text>
-                </Text>
-                <Text style={styles.label}>
-                  Akar: <Text style={styles.value}>{det.data_lamun?.Akar ?? 'Tidak ditemukan'}</Text>
-                </Text> 
-                <Text style={styles.label}>
-                  Keterangan: <Text style={styles.value}>{det.data_lamun?.Keterangan ?? 'Tidak ditemukan'}</Text>
-                </Text> 
-              </View>
-            ))}
-          </View>
+          <View
+  style={[styles.imageFrame, {
+    width: "100%",
+    height: imageSize.height * scaleFactor,
+    marginVertical: 16,
+  }]}
+>
+  <Image
+    source={{ uri: imageUri }}
+    style={styles.image}
+    resizeMode="cover"
+  />
+  {parsedDetections.map((det, i) => {
+    const [x1, y1, x2, y2] = det.box;
+    const boxStyle = {
+      position: "absolute" as const,
+      left: x1 * scaleFactor,
+      top: y1 * scaleFactor,
+      width: (x2 - x1) * scaleFactor,
+      height: (y2 - y1) * scaleFactor,
+      borderWidth: 2,
+      borderColor: "#0000FF",
+      borderRadius: 4,
+      backgroundColor: "rgba(0, 145, 255, 0.2)",
+    };
+    return (
+      <View key={i} style={boxStyle}>
+        <View style={styles.boxLabelWrapper}>
+          <Text style={styles.boxLabel}>
+            {det.label} ({(det.score * 100).toFixed(1)}%)
+          </Text>
+        </View>
+      </View>
+    );
+  })}
+</View>
         )}
+
+        {parsedDetections.length === 0 && (
+          <Text style={styles.noDetectionText}>Tidak ada deteksi ditemukan</Text>
+        )}
+
+ {parsedDetections.map((det, i) => (
+  <View key={i} style={{ marginBottom: 24 }}>
+    {/* Jenis dan Keyakinan */}
+    <View style={styles.subCard}>
+      <Text style={styles.detectionTitle}>Deteksi {i + 1}</Text>
+      <Text style={styles.subCardTitle}>📈 Hasil Utama</Text>
+      <Text style={styles.label}>Jenis Lamun</Text>
+      <Text style={styles.value}>{det.data_lamun?.nama ?? "-"}</Text>
+      <Text style={styles.label}>Keyakinan</Text>
+      <Text style={styles.value}>{(det.score * 100).toFixed(2)}%</Text>
+    </View>
+
+    {/* Genetik */}
+    <View style={styles.subCard}>
+      <Text style={styles.subCardTitle}>🧬 Genetik</Text>
+      <Text style={styles.label}>Genus</Text>
+      <Text style={styles.value}>{det.data_lamun?.Genus ?? "-"}</Text>
+      <Text style={styles.label}>Spesies</Text>
+      <Text style={styles.value}>{det.data_lamun?.Species ?? "-"}</Text>
+    </View>
+
+    {/* Morfologi */}
+    <View style={styles.subCard}>
+      <Text style={styles.subCardTitle}>🌿 Morfologi</Text>
+      <Text style={styles.label}>Daun</Text>
+      <Text style={styles.value}>{det.data_lamun?.Daun ?? "-"}</Text>
+      <Text style={styles.label}>Rhizoma</Text>
+      <Text style={styles.value}>{det.data_lamun?.Rhizoma ?? "-"}</Text>
+      <Text style={styles.label}>Akar</Text>
+      <Text style={styles.value}>{det.data_lamun?.Akar ?? "-"}</Text>
+    </View>
+
+    {/* Keterangan */}
+    <View style={styles.subCard}>
+      <Text style={styles.subCardTitle}>📄 Keterangan</Text>
+      <Text style={styles.value}>{det.data_lamun?.Keterangan ?? "-"}</Text>
+    </View>
+  </View>
+))}
       </ScrollView>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  detectionTitle: {
+  fontSize: 18,
+  fontFamily: "Poppins-Bold",
+  color: "#007B7F",
+  backgroundColor: "#E0FAF7",
+  paddingVertical: 8,
+  paddingHorizontal: 16,
+  borderRadius: 10,
+  marginBottom: 12,
+  alignSelf: "flex-start",
+},
+  topRightLogo: {
+  position: "absolute",
+  top: 40,
+  right: 20,
+  width: 40,
+  height: 40,
+  zIndex: 20,
+},
   backgroundImage: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     opacity: 0.92,
   },
   backButton: {
@@ -152,80 +193,127 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 6,
   },
-  imageContainer: {
-    width: '100%',
-    position: 'relative',
-    zIndex: 1,
-    marginTop: 100,
-    paddingHorizontal: 2,
+  Title: {
+  backgroundColor: "#77F8D2",
+  paddingVertical: 10,
+  paddingHorizontal: 24,
+  borderRadius: 14,
+  marginTop: 24,
+  alignSelf: "center",
+  fontSize: 20,
+  color: "#005C62",
+  fontFamily: "Poppins-Bold",
+  textAlign: "center",
   },
   scrollContent: {
     paddingHorizontal: 16,
     paddingBottom: 60,
-    paddingTop: 20,
+    paddingTop: 10,
+    flexGrow: 1,
   },
- TitleWrapper: {
-    position: "absolute",
-    top: 30,
-    left: 0,
-    right: 0,
-    alignItems: "center",
-  },
-  Title: {
-    backgroundColor: "rgba(119, 248, 210, 0.95)",
-    color: "rgb(0, 94, 103)",
-    fontSize: 18,
-    paddingHorizontal: 24,
-    paddingVertical: 8,
-    borderRadius: 12,
-    fontFamily: "Poppins-Bold",
-  },
+
+  subCard: {
+  backgroundColor: "#F7FFFE",
+  borderRadius: 16,
+  paddingVertical: 16,
+  paddingHorizontal: 20,
+  marginBottom: 14,
+  borderLeftWidth: 4,
+  borderLeftColor: "#00B6A0",
+  shadowColor: "#000",
+  shadowOpacity: 0.05,
+  shadowOffset: { width: 0, height: 1 },
+  shadowRadius: 4,
+  elevation: 2,
+},
+
+subCardTitle: {
+  fontSize: 16,
+  fontFamily: "Poppins-SemiBold",
+  color: "#007B7F",
+  marginBottom: 8,
+  borderBottomWidth: 1,
+  borderBottomColor: "#C8F1EB",
+  paddingBottom: 4,
+},
+
+card: {
+  backgroundColor: "rgba(255, 255, 255, 0.95)", // lebih terang dan elegan
+  borderRadius: 18,
+  paddingVertical: 20,
+  paddingHorizontal: 24,
+  marginBottom: 32,
+  borderWidth: 1,
+  borderColor: "#77F8D2",
+
+  shadowColor: "#000",
+  shadowOpacity: 0.08,
+  shadowOffset: { width: 0, height: 2 },
+  shadowRadius: 6,
+  elevation: 4,
+},
+label: {
+  fontFamily: "Poppins-SemiBold",
+  fontSize: 15.5,
+  color: "#007B7F",
+  marginTop: 12,
+  marginBottom: 2,
+},
+
+value: {
+  fontSize: 14,
+  color: "#444",
+  fontFamily: "Poppins-Regular",
+  marginBottom: 6,
+  lineHeight: 20,
+},
+
   noDetectionText: {
-    color: '#d9534f',
-    textAlign: 'center',
-    marginTop: 50,
-    fontSize: 16,
-    fontWeight: '500',
-    fontFamily: "Poppins-Regular"
+  backgroundColor: "#C11B17",
+  paddingVertical: 10,
+  paddingHorizontal: 24,
+  borderRadius: 14,
+  marginTop: 24,
+  alignSelf: "center",
+  fontSize: 20,
+  color: "#ffff",
+  fontFamily: "Poppins-Bold",
+  textAlign: "center",
   },
-  card: {
-    backgroundColor: '#ffffffcc',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 30,
-    borderColor: '#007B7F',
-    borderWidth: 1,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
+  imageFrame: {
+    backgroundColor: "#fff",
+    borderRadius: 18,
+    overflow: "hidden",
+    borderWidth: 2,
+    borderColor: "#77F8D2",
+    shadowColor: "#000",
+    shadowOpacity: 0.09,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-    elevation: 3,
+    shadowRadius: 8,
+    elevation: 2,
+    position: "relative",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+  },
+  boxLabelWrapper: {
+    backgroundColor: "rgba(34, 0, 255, 0.85)",
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    position: "absolute",
+    left: 0,
+    top: 0,
+    zIndex: 2,
+    maxWidth: "100%",
   },
   boxLabel: {
-    position: 'absolute',
-    bottom: -22,
-    left: 0,
-    color: '#fff',
-    backgroundColor: 'rgba(255,0,0,0.75)',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 4,
+    color: "#fff",
     fontSize: 12,
-    fontWeight: '600',
-  },
-  label: {
+    fontWeight: "700",
     fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#005C62',
-    marginTop: 8,
-    borderTopWidth: 1,
-    borderTopColor: '#d0f0ed',
-    paddingTop: 8,
-  },
-  value: {
-    fontSize: 15,
-    color: '#333',
-    marginTop: 2,
   },
 });

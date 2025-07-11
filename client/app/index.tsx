@@ -30,6 +30,13 @@ export default function HomeScreen() {
           resizeMode="contain"
         />
       </View>
+    <View style={styles.logoTopRight}>
+  <Image
+    source={require("../assets/images/logo_umrah.png")}  // Ganti sesuai lokasi file
+    style={styles.logoTopRightImage}
+    resizeMode="contain"
+  />
+</View>
 
       <View style={styles.menuGrid}>
         <Link href="/take-photo" asChild>
@@ -83,6 +90,18 @@ const styles = StyleSheet.create({
         height: "100%",
         opacity: 0.8,
     },
+    logoTopRight: {
+  position: "absolute",
+  top: 40,
+  right: 20,
+  zIndex: 10,
+},
+
+logoTopRightImage: {
+  width: 40,
+  height: 40,
+},
+
   container: {
     flex: 1,
     backgroundColor: "#0099A8",

@@ -1,6 +1,6 @@
 import * as ImageManipulator from 'expo-image-manipulator';
 import { useState } from 'react';
-import { uploadSeagrassImage } from '../service/api';
+import { uploadSeagrassImage, preprocessSeagrassImage } from '../service/api';
 
 export const useUploadImage = () => {
   const [loading, setLoading] = useState(false);
@@ -10,7 +10,6 @@ export const useUploadImage = () => {
     setLoading(true);
     setError(null);
     try {
-    
       const manipResult = await ImageManipulator.manipulateAsync(
         imageUri,
         [{ resize: { width: 640, height: 640 } }],
@@ -24,7 +23,6 @@ export const useUploadImage = () => {
       const fileName = fileUri.split('/').pop() ?? 'photo.jpg';
 
       const result = await uploadSeagrassImage(fileUri, fileName);
-
       return { result, fileUri };
     } catch (err: any) {
       setError(err);
@@ -34,5 +32,31 @@ export const useUploadImage = () => {
     }
   };
 
-  return { loading, error, uploadImage };
+  const preprocess = async (imageUri: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const manipResult = await ImageManipulator.manipulateAsync(
+        imageUri,
+        [{ resize: { width: 640, height: 640 } }],
+        {
+          compress: 0.7,
+          format: ImageManipulator.SaveFormat.JPEG,
+        }
+      );
+
+      const fileUri = manipResult.uri;
+      const fileName = fileUri.split('/').pop() ?? 'photo.jpg';
+
+      const result = await preprocessSeagrassImage(fileUri, fileName);
+      return { result, fileUri };
+    } catch (err: any) {
+      setError(err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, uploadImage, preprocess };
 };

@@ -3,17 +3,7 @@ import useFetch from "@/service/useFetch";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import React from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-} from "react-native";
+import { ActivityIndicator, FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import { useFonts } from "expo-font";
 
 const screenWidth = Dimensions.get("window").width;
@@ -30,18 +20,19 @@ export default function SeagrassTypes() {
   if (!fontsLoaded) return null;
 
   return (
-    <ImageBackground
-      source={require("../assets/images/background.png")}
-      style={styles.backgroundImage}
-    >
-      <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+    <ImageBackground source={require("../assets/images/background.png")} style={styles.backgroundImage}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.replace("/")}>
         <Ionicons name="arrow-back" size={24} color="rgb(0, 94, 103)" />
       </TouchableOpacity>
 
       <View style={styles.logoContainer}>
+        <Image source={require("../assets/images/logo.png")} style={styles.logo} resizeMode="contain" />
+      </View>
+
+      <View style={styles.logoTopRight}>
         <Image
-          source={require("../assets/images/logo.png")}
-          style={styles.logo}
+          source={require("../assets/images/logo_umrah.png")} // Ganti sesuai lokasi file
+          style={styles.logoTopRightImage}
           resizeMode="contain"
         />
       </View>
@@ -58,15 +49,11 @@ export default function SeagrassTypes() {
           contentContainerStyle={styles.grid}
           columnWrapperStyle={{ justifyContent: "space-between" }}
           renderItem={({ item }) => {
-            const imageUrl = `http://195.200.15.181:5006${item.imgSRC}`;
+            const imageUrl = `http://192.168.1.7:5006${item.imgSRC}`;
 
             return (
               <View style={styles.card}>
-                <Image
-                  source={{ uri: imageUrl }}
-                  style={styles.cardImage}
-                  resizeMode="cover"
-                />
+                <Image source={{ uri: imageUrl }} style={styles.cardImage} resizeMode="cover" />
                 <View style={styles.cardContent}>
                   <Text style={styles.cardTitle}>{item.Species}</Text>
                   <Text style={styles.cardDescription} numberOfLines={3}>
@@ -100,6 +87,17 @@ const styles = StyleSheet.create({
     height: "100%",
     opacity: 0.9,
   },
+  logoTopRight: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    zIndex: 10,
+  },
+
+  logoTopRightImage: {
+    width: 40,
+    height: 40,
+  },
   backButton: {
     position: "absolute",
     top: 40,
@@ -125,7 +123,7 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginTop: 50,
-    fontFamily: "Poppins-Regular"
+    fontFamily: "Poppins-Regular",
   },
   grid: {
     paddingHorizontal: 12,

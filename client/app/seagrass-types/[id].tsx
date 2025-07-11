@@ -1,28 +1,15 @@
-import { useFetchSeagrassDetails } from '@/service/useFetch';
-import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { useFetchSeagrassDetails } from "@/service/useFetch";
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React from "react";
+import { ActivityIndicator, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useFonts } from "expo-font";
 
 export default function SeagrassDetails() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
 
-  const {
-    data: seagrassDetails,
-    loading: isLoading,
-    error,
-  } = useFetchSeagrassDetails(id as string);
+  const { data: seagrassDetails, loading: isLoading, error } = useFetchSeagrassDetails(id as string);
 
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
@@ -32,32 +19,21 @@ export default function SeagrassDetails() {
 
   const getImageUrl = (src: string | undefined) => {
     if (!src) return null;
-    return src.startsWith('/')
-      ? `http://195.200.15.181:5006${src}`
-      : `http://195.200.15.181:5006/${src}`;
+    return src.startsWith("/") ? `http://192.168.1.7:5006${src}` : `http://.168.1.7:5006/${src}`;
   };
 
   const imageUrl = getImageUrl(seagrassDetails?.imgSRC);
 
   return (
-    <ImageBackground
-      source={require('../../assets/images/background.png')}
-      style={styles.backgroundImage}
-    >
-      <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+    <ImageBackground source={require("../../assets/images/background.png")} style={styles.backgroundImage}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.replace("/")}>
         <Ionicons name="arrow-back" size={26} color="#003c43" />
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.card}>
           <Text style={styles.title}>{seagrassDetails?.Species}</Text>
-          {imageUrl && (
-            <Image
-              source={{ uri: imageUrl }}
-              style={styles.image}
-              resizeMode="cover"
-            />
-          )}
+          {imageUrl && <Image source={{ uri: imageUrl }} style={styles.image} resizeMode="cover" />}
         </View>
 
         <View style={styles.detailCard}>
@@ -67,18 +43,18 @@ export default function SeagrassDetails() {
             <Text style={styles.errorText}>Terjadi kesalahan: {error.message}</Text>
           ) : (
             <>
-              <Text style={styles.label}>Keterangan:</Text>
-              <Text style={styles.text}>{seagrassDetails?.Keterangan ?? '-'}</Text>
-              <Text style={styles.label}>Genus:</Text>
-              <Text style={styles.text}>{seagrassDetails?.Genus ?? '-'}</Text>
-              <Text style={styles.label}>Spesies:</Text>
-              <Text style={styles.text}>{seagrassDetails?.Species ?? '-'}</Text>
-              <Text style={styles.label}>Daun:</Text>
-              <Text style={styles.text}>{seagrassDetails?.Daun ?? '-'}</Text>
-              <Text style={styles.label}>Rhizoma:</Text>
-              <Text style={styles.text}>{seagrassDetails?.Rhizoma ?? '-'}</Text>
-              <Text style={styles.label}>Akar:</Text>
-              <Text style={styles.text}>{seagrassDetails?.Akar ?? '-'}</Text>
+              <Text style={styles.label}> 📄Keterangan:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Keterangan ?? "-"}</Text>
+              <Text style={styles.label}>🧬Genus:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Genus ?? "-"}</Text>
+              <Text style={styles.label}>🌱Spesies:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Species ?? "-"}</Text>
+              <Text style={styles.label}>🍃Daun:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Daun ?? "-"}</Text>
+              <Text style={styles.label}>🌿Rhizoma:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Rhizoma ?? "-"}</Text>
+              <Text style={styles.label}>🪴Akar:</Text>
+              <Text style={styles.text}>{seagrassDetails?.Akar ?? "-"}</Text>
             </>
           )}
         </View>
@@ -96,10 +72,11 @@ const styles = StyleSheet.create({
     height: "100%",
     opacity: 0.8,
   },
+
   container: {
     padding: 16,
     paddingTop: 80,
-    alignItems: 'center',
+    alignItems: "center",
   },
   backButton: {
     position: "absolute",
@@ -111,45 +88,45 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   card: {
-    backgroundColor: '#a1f0d9',
-    width: '100%',
+    backgroundColor: "#a1f0d9",
+    width: "100%",
     borderRadius: 20,
     padding: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#003c43',
+    fontWeight: "bold",
+    color: "#003c43",
     marginBottom: 10,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: "Poppins-Bold",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 180,
     borderRadius: 12,
   },
   detailCard: {
-    backgroundColor: '#a1f0d9cc',
-    width: '100%',
+    backgroundColor: "#a1f0d9cc",
+    width: "100%",
     borderRadius: 20,
     padding: 16,
   },
   label: {
-    fontWeight: 'bold',
-    color: '#003c43',
+    fontWeight: "bold",
+    color: "#003c43",
     marginTop: 8,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: "Poppins-Bold",
   },
   text: {
-    color: '#003c43',
-    textAlign: 'justify',
-    fontFamily: 'Poppins-Regular',
+    color: "#003c43",
+    textAlign: "justify",
+    fontFamily: "Poppins-Regular",
   },
   errorText: {
-    color: '#900',
-    fontStyle: 'italic',
-    fontFamily: 'Poppins-Regular',
+    color: "#900",
+    fontStyle: "italic",
+    fontFamily: "Poppins-Regular",
   },
 });
