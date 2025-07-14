@@ -19,7 +19,7 @@ export default function SeagrassDetails() {
 
   const getImageUrl = (src: string | undefined) => {
     if (!src) return null;
-    return src.startsWith("/") ? `http://192.168.1.7:5006${src}` : `http://.168.1.7:5006/${src}`;
+    return src.startsWith("/") ? `http://192.168.58.185:5006${src}` : `http://192.168.58.185:5006/${src}`;
   };
 
   const imageUrl = getImageUrl(seagrassDetails?.imgSRC);

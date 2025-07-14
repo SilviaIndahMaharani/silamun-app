@@ -1,6 +1,7 @@
 import { useUploadImage } from '@/service/useUploadImage';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from "expo-image-manipulator";
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -31,46 +32,69 @@ export default function UploadImage() {
 
   if (!fontsLoaded) return null;
 
-  const openCamera = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      return Alert.alert('Izin kamera ditolak');
+const openCamera = async () => {
+  const { status } = await ImagePicker.requestCameraPermissionsAsync();
+  if (status !== 'granted') {
+    return Alert.alert('Izin kamera ditolak');
+  }
+
+  const result = await ImagePicker.launchCameraAsync({
+    allowsEditing: false,
+    quality: 1, // ambil full
+  });
+
+  if (!result.canceled) {
+    const uri = result.assets[0].uri;
+
+    // Kompresi sebelum preprocessing
+    const compressed = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 640 } }],
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+    );
+
+    setCapturedPhoto(compressed.uri);
+
+    try {
+      const { result: preprocessResult } = await preprocess(compressed.uri);
+      setPreprocessedPhoto(`data:image/jpeg;base64,${preprocessResult.preprocessed_base64}`);
+    } catch (err: any) {
+      Alert.alert("Gagal Preprocess", err.message);
     }
+  }
+};
 
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const uri = result.assets[0].uri;
-      setCapturedPhoto(uri);
-
-      try {
-        const { result } = await preprocess(uri);
-        setPreprocessedPhoto(`data:image/jpeg;base64,${result.preprocessed_base64}`);
-      } catch (err: any) {
-        Alert.alert("Gagal Preprocess", err.message);
-      }
-    }
-  };
 
 const handleUpload = async () => {
   if (!capturedPhoto) return;
 
   try {
-    const { result } = await uploadImage(capturedPhoto);
+    console.log("⏳ Preprocessing...");
+    const { result: preprocessResult } = await preprocess(capturedPhoto);
+    const claheUri = `data:image/jpeg;base64,${preprocessResult.preprocessed_base64}`;
+    setPreprocessedPhoto(claheUri);
+
+    console.log("⏳ Upload original...");
+    const { result: resultOriginal } = await uploadImage(capturedPhoto);
+
+    console.log("⏳ Upload CLAHE...");
+    const { result: resultCLAHE } = await uploadImage(claheUri);
+
     router.push({
-      pathname: '/identification-result',
+      pathname: "/identification-result",
       params: {
-        detections: JSON.stringify(result.detections),
-        imageUri: preprocessedPhoto, 
+        detectionsOriginal: JSON.stringify(resultOriginal.detections),
+        detectionsCLAHE: JSON.stringify(resultCLAHE.detections),
+        imageUri: claheUri,
+        originalUri: capturedPhoto,
       },
     });
   } catch (err: any) {
-    Alert.alert('Upload Gagal', err.message);
+    Alert.alert("Upload Gagal", err.message);
   }
 };
+
+
 
   return (
     <ImageBackground

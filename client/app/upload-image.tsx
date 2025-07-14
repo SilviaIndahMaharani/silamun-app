@@ -49,22 +49,33 @@ export default function UploadImage() {
     }
   };
 
-  const handleUpload = async () => {
-    if (!selectedImage) return;
+const handleUpload = async () => {
+  if (!selectedImage) return;
 
-    try {
-      const { result, fileUri } = await uploadImage(selectedImage);
-      router.push({
-        pathname: "/identification-result",
-        params: {
-          detections: JSON.stringify(result.detections),
-          imageUri: preprocessedImage,
-        },
-      });
-    } catch (err: any) {
-      Alert.alert("Upload tidak berhasil", err.message);
-    }
-  };
+  try {
+    const { result: preprocessResult } = await preprocess(selectedImage);
+    const claheUri = `data:image/jpeg;base64,${preprocessResult.preprocessed_base64}`;
+    setPreprocessedImage(claheUri);
+
+    const { result: resultOriginal } = await uploadImage(selectedImage);
+    const { result: resultCLAHE } = await uploadImage(claheUri);
+
+    // Gunakan encodeURIComponent agar URI tetap aman di-query param
+    router.push({
+      pathname: "/identification-result",
+      params: {
+        detectionsOriginal: JSON.stringify(resultOriginal.detections),
+        detectionsCLAHE: JSON.stringify(resultCLAHE.detections),
+        imageUri: encodeURIComponent(claheUri),
+        originalUri: encodeURIComponent(selectedImage),
+      },
+    });
+  } catch (err: any) {
+    Alert.alert("Upload tidak berhasil", err.message);
+  }
+};
+
+
 
   return (
     
@@ -77,37 +88,6 @@ export default function UploadImage() {
   source={require("../assets/images/logo_umrah.png")} 
   style={styles.topRightLogo}
 />
-
-  <Modal visible={showRules} animationType="slide" transparent>
-  <View style={styles.modalWrapper}>
-    <View style={styles.modalContent}>
-      <ScrollView>
-        <View style={styles.modalHeader}>
-          <Ionicons name="information-circle-outline" size={26} color="rgb(0, 94, 103)" />
-          <Text style={styles.modalTitle}>Aturan Pengambilan Foto</Text>
-        </View>
-
-        <View style={styles.divider} />
-
-        {[
-          "Pastikan gambar fokus dan objek jelas terlihat.",
-          "Gunakan pencahayaan yang cukup dan hindari bayangan.",
-          "Hindari gangguan latar belakang atau refleksi.",
-          "Saat ini SiLamun hanya dapat mengidentifikasi lamun jenis Cymodocea rotundata, Enhalus acoroides, Syringodium isoetifolium, dan Thalassia hemprichii.",
-        ].map((rule, index) => (
-          <View key={index} style={styles.bulletItem}>
-            <Ionicons name="leaf-outline" size={18} color="rgb(0, 94, 103)" style={{ marginRight: 8 }} />
-            <Text style={styles.bulletText}>{rule}</Text>
-          </View>
-        ))}
-
-        <TouchableOpacity style={styles.modalButton} onPress={() => setShowRules(false)}>
-          <Text style={styles.modalButtonText}>Mengerti</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
-  </View>
-</Modal>
 
 
       <TouchableOpacity style={styles.backButton} onPress={() => router.replace("/")}>

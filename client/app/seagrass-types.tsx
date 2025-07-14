@@ -49,7 +49,7 @@ export default function SeagrassTypes() {
           contentContainerStyle={styles.grid}
           columnWrapperStyle={{ justifyContent: "space-between" }}
           renderItem={({ item }) => {
-            const imageUrl = `http://192.168.1.7:5006${item.imgSRC}`;
+            const imageUrl = `http://192.168.58.185:5006${item.imgSRC}`;
 
             return (
               <View style={styles.card}>
